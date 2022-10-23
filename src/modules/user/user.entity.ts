@@ -1,4 +1,4 @@
-import { Note } from 'modules/note/note.entity';
+import { Note } from '../note/note.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { PasswordTransformer } from './password.transformer';
 
