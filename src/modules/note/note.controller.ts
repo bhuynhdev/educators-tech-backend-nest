@@ -12,7 +12,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   NotesService,
-  NoteCreatePayload,
   NoteGetAllPayload,
   NoteGetSinglePayload,
   NoteUpdatePayload,
@@ -30,8 +29,11 @@ export class NoteController {
   @ApiResponse({ status: 201, description: 'Created' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async create(@Body() payload: NoteCreatePayload): Promise<any> {
-    const createdNote = await this.noteService.create(payload);
+  async create(@Req() req): Promise<any> {
+    const createdNote = await this.noteService.create({
+      markdown: '',
+      owner: req.user.id,
+    });
     return createdNote;
   }
 

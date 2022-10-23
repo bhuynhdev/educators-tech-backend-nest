@@ -1,18 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class NoteCreatePayload {
-  @ApiProperty({
-    required: true,
-  })
-  markdown: string;
-  @ApiProperty({
-    required: true,
-  })
-  @IsNotEmpty()
-  owner: number;
-}
-
 export class NoteGetSinglePayload {
   @ApiProperty({
     required: true,
@@ -32,6 +20,10 @@ export class NoteUpdatePayload {
     required: true,
   })
   markdown: string;
+  @ApiProperty({
+    required: true,
+  })
+  title: string;
   @ApiProperty({
     required: true,
   })

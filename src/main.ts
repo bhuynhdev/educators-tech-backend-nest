@@ -8,7 +8,7 @@ import { setupSwagger } from './swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   setupSwagger(app);
-  app.enableCors({ credentials: true, origin: ['http://localhost:5000'] });
+  app.enableCors({ credentials: true, origin: [process.env.FRONTEND_URL] });
   app.useGlobalPipes(new TrimStringsPipe(), new ValidationPipe());
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   await app.listen(3000);

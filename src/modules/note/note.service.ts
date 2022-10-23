@@ -46,6 +46,7 @@ export class NotesService {
     return await this.noteRepository.save({
       ...note,
       markdown: payload.markdown,
+      title: payload.title,
     });
   }
 }
