@@ -1,8 +1,5 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Note } from 'modules/note/note.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { PasswordTransformer } from './password.transformer';
 
 @Entity({
@@ -27,6 +24,9 @@ export class User {
     transformer: new PasswordTransformer(),
   })
   password: string;
+
+  @OneToMany(() => Note, (note) => note.owner)
+  notes: Note[];
 
   toJSON() {
     const { password, ...self } = this;

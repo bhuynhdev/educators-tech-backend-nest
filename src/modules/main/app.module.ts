@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { AuthModule } from './../auth';
+import { NoteModule } from './../note';
 import { CommonModule } from './../common';
 import { ConfigModule, ConfigService } from './../config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from 'modules/user';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { AppService } from './app.service';
       },
     }),
     ConfigModule,
+    UserModule,
+    NoteModule,
     AuthModule,
     CommonModule,
   ],
