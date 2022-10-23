@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
@@ -39,23 +48,23 @@ export class NoteController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard())
-  @Get('')
+  @Get('all')
   @ApiResponse({ status: 201, description: 'Created' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getSingle(@Body() payload: NoteGetSinglePayload): Promise<any> {
-    const note = await this.noteService.get(payload.id);
-    return note;
+  async getAll(@Req() req): Promise<any> {
+    const notes = await this.noteService.getAll(req.user.id);
+    return notes;
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard())
-  @Get('/all')
+  @Get(':id')
   @ApiResponse({ status: 201, description: 'Created' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getAll(@Body() payload: NoteGetAllPayload): Promise<any> {
-    const note = await this.noteService.get(payload.owner);
+  async getSingle(@Param() params): Promise<any> {
+    const note = await this.noteService.get(params.id);
     return note;
   }
 }

@@ -11,7 +11,6 @@ export class NotesService {
   constructor(
     @InjectRepository(Note)
     private readonly noteRepository: Repository<Note>,
-    @InjectRepository(User)
     private readonly usersService: UsersService,
   ) {}
 
@@ -24,7 +23,7 @@ export class NotesService {
     if (!user) {
       return [];
     }
-    return this.noteRepository.find({ owner: user });
+    return await this.noteRepository.find({ owner: user });
   }
 
   async create(payload: NoteFillableFields) {
