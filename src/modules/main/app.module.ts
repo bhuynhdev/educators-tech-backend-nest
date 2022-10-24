@@ -3,30 +3,34 @@ import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { AuthModule } from './../auth';
 import { NoteModule } from './../note';
 import { CommonModule } from './../common';
-import { ConfigModule, ConfigService } from './../config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from '../user';
+import appConfig from '../../config/configuration';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [appConfig],
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return {
-          type: configService.get('DB_TYPE'),
-          host: configService.get('DB_HOST'),
-          port: configService.get('DB_PORT'),
-          username: configService.get('DB_USERNAME'),
-          password: configService.get('DB_PASSWORD'),
-          database: configService.get('DB_DATABASE'),
+          type: 'postgres',
+          host: configService.get('database.host'),
+          port: configService.get('database.port'),
+          username: configService.get('database.username'),
+          password: configService.get('database.password'),
+          database: configService.get('database.databaseName'),
           entities: [__dirname + './../**/**.entity{.ts,.js}'],
-          synchronize: configService.get('DB_SYNC') === 'true',
-        } as TypeOrmModuleAsyncOptions;
+          synchronize: configService.get('database.sync') === 'true',
+        };
       },
     }),
-    ConfigModule,
     UserModule,
     NoteModule,
     AuthModule,

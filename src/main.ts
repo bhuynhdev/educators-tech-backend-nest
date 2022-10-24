@@ -1,4 +1,5 @@
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { useContainer } from 'class-validator';
 import { TrimStringsPipe } from './modules/common/transformer/trim-strings.pipe';
@@ -8,9 +9,12 @@ import { setupSwagger } from './swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   setupSwagger(app);
-  app.enableCors({ credentials: true, origin: [process.env.FRONTEND_URL] });
+  app.enableCors({
+    credentials: true,
+    origin: [app.get(ConfigService).get('FRONTEND_URL')],
+  });
   app.useGlobalPipes(new TrimStringsPipe(), new ValidationPipe());
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
-  await app.listen(3000);
+  await app.listen(parseInt(process.env.PORT) || 3000);
 }
 bootstrap();
